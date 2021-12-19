@@ -1,4 +1,5 @@
 <template>
+<div>
   <nav class="navbar" role="navigation" aria-label="main navigation" style="min-height:5rem;">
     <div class="navbar-brand" >
       <a href="/" class="navbar-item is-size-4">LMS</a>
@@ -23,6 +24,13 @@
 
   </nav>
   <router-view/>
+
+  <footer>
+    <div class="content has-text-centered">
+      <p>Designed by Bilard. Copyright (c) 2021</p>
+    </div>
+  </footer>
+</div>
 </template>
 
 <style lang="scss">
