@@ -1,6 +1,6 @@
 <template>
 <div>
-  <nav class="navbar" role="navigation" aria-label="main navigation" style="min-height:5rem;">
+  <nav class="navbar is-primary" role="navigation" aria-label="main navigation" style="min-height:5rem;">
     <div class="navbar-brand" >
       <a href="/" class="navbar-item is-size-4">LMS</a>
     </div>
