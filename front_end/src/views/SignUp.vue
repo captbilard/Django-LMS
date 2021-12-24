@@ -58,6 +58,8 @@
                             </div>
 
                         </form>
+                        <hr>
+                        <router-link to="/log-in">Click here</router-link> to login
                     </div>
                 </div>
             </div>
