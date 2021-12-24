@@ -16,7 +16,7 @@
               <span class="icon is-size-2 has-text-success">
                 <i class="far fa-clock"></i>
               </span>
-              <h2 class="is-size-4 my-4">Learn at your own pace</h2>
+              <h2 class="is-size-4 my-4">Learn at your pace</h2>
               <p class="is-size-6">When you want</p>
             </div>
           </div>

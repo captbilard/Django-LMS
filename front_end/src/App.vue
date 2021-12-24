@@ -14,7 +14,7 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a href="#" class="button is-primary"><strong>Sign Up</strong></a>
+            <a href="/sign-up" class="button is-primary"><strong>Sign Up</strong></a>
             <a href="#" class="button is-light">Login</a>
           </div>
         </div>
