@@ -1,37 +1,26 @@
 <template>
 <div>
-  <nav class="navbar is-primary" role="navigation" aria-label="main navigation" style="min-height:5rem;">
-    <div class="navbar-brand" >
-      <a href="/" class="navbar-item is-size-4">LMS</a>
-    </div>
-
-    <div class="navbar-menu" id="navbar-item">
-      <div class="navbar-start">
-        <a href="/" class="navbar-item">Home</a>
-        <a href="/about" class="navbar-item">About</a>
-      </div>
-
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a href="/sign-up" class="button is-primary"><strong>Sign Up</strong></a>
-            <a href="/login" class="button is-light">Login</a>
-          </div>
-        </div>
-      </div>
-     
-    </div>
-
-  </nav>
+  <Nav/>
   <router-view/>
 
-  <footer>
-    <div class="content has-text-centered">
-      <p>Designed by Bilard. Copyright (c) 2021</p>
-    </div>
-  </footer>
+  <Footer/>
+  
 </div>
 </template>
+
+
+<script>
+import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
+export default {
+  name: 'App',
+  components: {
+    Nav,
+    Footer
+  }
+}
+</script>
+
 
 <style lang="scss">
 // Configuring Bulma
