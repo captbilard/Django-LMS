@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="columns">
                     <div class="column is-4 is-offset-4">
-                        <form action="post">
+                        <form v-on:submit.prevent="onSubmit">
                             <div class="field">
                                 <label for="username" class="label">Username</label>
                                 <div class="control has-icons-left">
@@ -66,3 +66,13 @@
         </section>
     </div>
 </template>
+
+<script>
+export default {
+    methods:{
+        onSubmit(){
+            console.log("This is submitted")
+        }
+    }
+}
+</script>
