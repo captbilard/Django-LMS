@@ -4,6 +4,8 @@ import About from '../views/About.vue'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 
+import MyAccount from '../views/dashboard/MyAccount.vue'
+
 const routes = [
   {
     path: '/',
@@ -24,7 +26,12 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login
-  }
+  },
+  {
+    path: "/dashboard/my-account",
+    name: "MyAccount",
+    component: MyAccount
+  },
 
 ]
 
