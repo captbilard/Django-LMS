@@ -22,9 +22,9 @@ export default {
   // Initialise the vuex before loading the site
   beforeCreate() {
     this.$store.commit("initializeStore");
-    let AUTH_TOKEN = this.$store.state.user.token;
-    if (AUTH_TOKEN) {
-      axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+    const token = this.$store.state.user.token;
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = token;
     } else {
       axios.defaults.headers.common["Authorization"] = "";
     }
