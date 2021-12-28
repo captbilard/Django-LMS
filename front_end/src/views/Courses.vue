@@ -23,7 +23,7 @@
 
           <div class="column is-10">
             <div class="columns is-multiline">
-              <div class="column is-4">
+              <div class="column is-4" v-for="course in courses" :key="course.id">
                 <div class="card">
                   <div class="card-image">
                     <figure class="image is-4by3">
@@ -37,107 +37,20 @@
                     <div class="media">
                       <div class="media-content">
                         <p class="title is-5">
-                          Build a social network using Django
+                          {{course.title}}
                         </p>
                       </div>
                     </div>
                     <div class="content">
                       <p>
-                        Learn the basics of Django by building a social network
-                        from scratch.
+                        {{course.short_description}}
                       </p>
-                      <p class="has-text-left"><a href="#">More</a></p>
+                      <p class="has-text-left"><a href="">More</a></p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="column is-4">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img
-                        src="../assets/placeholder.jpg"
-                        alt="Learning Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-content">
-                        <p class="title is-5">
-                          Build a social network using Django
-                        </p>
-                      </div>
-                    </div>
-                    <div class="content">
-                      <p>
-                        Learn the basics of Django by building a social network
-                        from scratch.
-                      </p>
-                      <p class="has-text-left"><a href="#">More</a></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="column is-4">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img
-                        src="../assets/placeholder.jpg"
-                        alt="Learning Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-content">
-                        <p class="title is-5">
-                          Build a social network using Django
-                        </p>
-                      </div>
-                    </div>
-                    <div class="content">
-                      <p>
-                        Learn the basics of Django by building a social network
-                        from scratch.
-                      </p>
-                      <p class="has-text-left"><a href="#">More</a></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="column is-4">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img
-                        src="../assets/placeholder.jpg"
-                        alt="Learning Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-content">
-                        <p class="title is-5">
-                          Build a social network using Django
-                        </p>
-                      </div>
-                    </div>
-                    <div class="content">
-                      <p>
-                        Learn the basics of Django by building a social network
-                        from scratch.
-                      </p>
-                      <p class="has-text-left"><a href="#">More</a></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="column is-12">
                 <nav class="pagination">
                   <a href="" class="pagination-previous">Previous</a>
@@ -178,3 +91,22 @@
     </section>
   </div>
 </template>
+
+<script>
+import axios from 'axios'
+export default {
+  data(){
+    return{
+      courses: []
+    }
+  },
+  mounted(){
+    const baseUrl = "http://127.0.0.1:8000"
+    axios.get(`${baseUrl}/api/v1/courses/`)
+    .then(response =>{
+      this.courses = response.data
+      console.log(response.data);
+    })
+  }
+}
+</script>
