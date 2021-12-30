@@ -42,3 +42,23 @@
     </div>
     
 </template>
+
+<script>
+import axios from 'axios'
+export default {
+  data(){
+    return{
+      course: []
+    }
+  },
+  mounted(){
+    const baseUrl = "http://127.0.0.1:8000"
+    const slug = this.$route.params.slug
+    axios.get(`${baseUrl}/api/v1/courses/${slug}`)
+    .then(response =>{
+      this.course = response.data
+      console.log(response.data);
+    })
+  }
+}
+</script>
