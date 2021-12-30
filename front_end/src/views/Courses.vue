@@ -45,7 +45,7 @@
                       <p>
                         {{course.short_description}}
                       </p>
-                      <p class="has-text-left"><a href="">More</a></p>
+                      <p class="has-text-left"><router-link :to="{name:'Course', params: {slug:course.slug}}">More</router-link></p>
                     </div>
                   </div>
                 </div>
