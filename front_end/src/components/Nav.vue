@@ -13,8 +13,13 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a href="/sign-up" class="button is-primary"><strong>Sign Up</strong></a>
-                        <a href="/login" class="button is-light">Login</a>
+                        <template v-if="$store.state.user.isAuthenticated">
+                            <router-link to="/dashboard/my-account" class="button is-warning"> My Dashboard</router-link>
+                        </template>
+                        <template v-else>
+                            <a href="/sign-up" class="button is-primary"><strong>Sign Up</strong></a>
+                            <a href="/login" class="button is-light">Login</a>
+                        </template>
                     </div>
                 </div>
             </div>

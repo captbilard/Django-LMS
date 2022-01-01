@@ -23,16 +23,18 @@
                     </div>
 
                     <div class="column is-10">
-                        <h3>Introduction</h3>
-                        <p class="has-text-justified">
-                            {{ course.long_description }}
-                        </p>
-                        
-
-                        <h3>Getting Started</h3>
-                        <p class="has-text-justified">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sit amet justo donec enim diam vulputate ut pharetra sit. At volutpat diam ut venenatis tellus in. Vestibulum morbi blandit cursus risus. Lectus mauris ultrices eros in cursus turpis. Arcu ac tortor dignissim convallis aenean et tortor at risus. Aliquet risus feugiat in ante metus dictum at. Tortor dignissim convallis aenean et. Turpis nunc eget lorem dolor sed. At in tellus integer feugiat scelerisque varius morbi.
-                        </p>
+                        <template v-if="$store.state.user.isAuthenticated">
+                            <h3>Introduction</h3>
+                            <p class="has-text-justified">
+                                {{ course.long_description }}
+                            </p>
+                        </template>
+                        <template v-else>
+                            <h2>Restricted Access</h2>
+                            <p>
+                                Kindly Sign Up or Login to access course content
+                            </p>
+                        </template>
                     </div>
                 </div>
             </div>
