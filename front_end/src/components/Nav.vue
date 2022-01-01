@@ -25,10 +25,9 @@
               >
             </template>
             <template v-else>
-              <a href="/sign-up" class="button is-primary"
-                ><strong>Sign Up</strong></a
-              >
-              <a href="/login" class="button is-light">Login</a>
+              <router-link to="/sign-up" class="button is-primary"
+                ><strong>Sign Up</strong></router-link>
+              <router-link to="/login" class="button is-light">Login</router-link>
             </template>
           </div>
         </div>

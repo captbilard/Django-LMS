@@ -17,7 +17,21 @@ import axios from 'axios'
 
 export default {
     methods:{
-        logout: function (){
+        logout: async function (){
+            const baseUrl = "http://127.0.0.1:8000"
+            const token = localStorage.getItem('token')
+            await axios.post(`${baseUrl}/api/v1/token/logout/`, token, {
+                headers:{
+                    Authorization: `Token ${token}`
+                }
+            })
+            .then(response =>{
+                console.log("Logged Out");
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
             delete axios.defaults.headers.common["Authorization"]
 
             //remove token from 
