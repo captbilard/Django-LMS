@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 
 from .models import Courses
-from courses.serializers import CourseListSerializer
+from courses.serializers import CourseListSerializer, CourseDetailSerializer
 
 
 # Create your views here.
@@ -19,5 +19,5 @@ def get_courses(request):
 @api_view(['GET'])
 def get_individual_course(request, slug):
     course = Courses.objects.get(slug=slug)
-    serializer = CourseListSerializer(course)
+    serializer = CourseDetailSerializer(course)
     return Response(serializer.data, status=status.HTTP_200_OK)
