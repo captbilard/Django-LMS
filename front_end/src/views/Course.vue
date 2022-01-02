@@ -12,12 +12,10 @@
           <div class="column is-2">
             <h3>Table of Contents</h3>
             <ul>
-              <li><a href="#">Introduction</a></li>
-              <li><a href="#">Getting Started</a></li>
-              <li><a href="#">Part 1</a></li>
-              <li><a href="#">Part 2</a></li>
-              <li><a href="#">Part 3</a></li>
-              <li><a href="#">Summary</a></li>
+              <li v-for="lesson in lessons" :key="lesson.id">
+                <a href="#">{{ lesson.title }}</a>
+              </li>
+              
             </ul>
           </div>
 
@@ -44,15 +42,18 @@ import axios from "axios";
 export default {
   data() {
     return {
-      course: [],
+      course: {},
+      lessons: []
     };
   },
   mounted() {
     const baseUrl = "http://127.0.0.1:8000";
     const slug = this.$route.params.slug;
     axios.get(`${baseUrl}/api/v1/courses/${slug}`).then((response) => {
-      this.course = response.data;
-      console.log(response.data);
+      this.course = response.data.course;
+      this.lessons = response.data.lessons;
+      console.log(this.course);
+      console.log(this.lessons);
     });
   },
 };

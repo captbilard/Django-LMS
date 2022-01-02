@@ -13,13 +13,13 @@ from courses.serializers import CourseListSerializer, CourseDetailSerializer, Le
 @api_view(['GET'])
 def get_courses(request):
     courses = Courses.objects.all()
-    serializer = CourseDetailSerializer(courses, many=True)
+    serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_individual_course(request, slug):
     course = Courses.objects.get(slug=slug)
-    course_serializer = CourseListSerializer(course)
+    course_serializer = CourseDetailSerializer(course)
     lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
     data = {
         "course": course_serializer.data,
