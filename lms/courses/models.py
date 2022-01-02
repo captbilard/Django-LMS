@@ -56,6 +56,7 @@ class Lessons(models.Model):
 
     class Meta:
         verbose_name_plural = "Lessons"
+        ordering  = ['id']
     
     def __str__(self):
         return self.title
