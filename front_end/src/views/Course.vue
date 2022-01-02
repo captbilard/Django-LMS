@@ -13,7 +13,7 @@
             <h3>Table of Contents</h3>
             <ul>
               <li v-for="lesson in lessons" :key="lesson.id">
-                <a href="#">{{ lesson.title }}</a>
+                <a href="#" @click="activeLesson=lesson">{{ lesson.title }}</a>
               </li>
               
             </ul>
@@ -21,10 +21,18 @@
 
           <div class="column is-10">
             <template v-if="$store.state.user.isAuthenticated">
-              <h3>Introduction</h3>
-              <p class="has-text-justified">
-                {{ course.long_description }}
-              </p>
+              <template v-if="activeLesson">
+                <h2>{{activeLesson.title}}</h2>
+                <p class="has-text-justified">
+                  {{activeLesson.long_description}}
+                </p>
+              </template>
+              <template v-else>
+                <!-- <h3>Introduction</h3> -->
+                <p class="has-text-justified">
+                  {{ course.long_description }}
+                </p>
+              </template>
             </template>
             <template v-else>
               <h2>Restricted Access</h2>
@@ -43,7 +51,8 @@ export default {
   data() {
     return {
       course: {},
-      lessons: []
+      lessons: [],
+      activeLesson: null,
     };
   },
   mounted() {
