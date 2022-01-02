@@ -46,7 +46,7 @@ class Lessons(models.Model):
         (QUIZ, 'Quiz'),
     ]
 
-    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lesson')
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lessons')
     title = models.CharField(max_length=255)
     slug = models.SlugField()
     short_description = models.TextField(blank=True, null=True)
