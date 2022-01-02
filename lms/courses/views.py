@@ -2,10 +2,10 @@ from django.shortcuts import render
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework import serializers, status
 
-from .models import Courses
-from courses.serializers import CourseListSerializer, CourseDetailSerializer
+from .models import Courses, Lessons
+from courses.serializers import CourseListSerializer, CourseDetailSerializer, LessonListSerializer
 
 
 # Create your views here.
