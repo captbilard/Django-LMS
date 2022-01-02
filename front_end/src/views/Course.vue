@@ -12,21 +12,27 @@
           <div class="column is-2">
             <h3>Table of Contents</h3>
             <ul>
-              <li><a href="#">Introduction</a></li>
-              <li><a href="#">Getting Started</a></li>
-              <li><a href="#">Part 1</a></li>
-              <li><a href="#">Part 2</a></li>
-              <li><a href="#">Part 3</a></li>
-              <li><a href="#">Summary</a></li>
+              <li v-for="lesson in lessons" :key="lesson.id">
+                <a href="#" @click="activeLesson=lesson">{{ lesson.title }}</a>
+              </li>
+              
             </ul>
           </div>
 
           <div class="column is-10">
             <template v-if="$store.state.user.isAuthenticated">
-              <h3>Introduction</h3>
-              <p class="has-text-justified">
-                {{ course.long_description }}
-              </p>
+              <template v-if="activeLesson">
+                <h2>{{activeLesson.title}}</h2>
+                <p class="has-text-justified">
+                  {{activeLesson.long_description}}
+                </p>
+              </template>
+              <template v-else>
+                <!-- <h3>Introduction</h3> -->
+                <p class="has-text-justified">
+                  {{ course.long_description }}
+                </p>
+              </template>
             </template>
             <template v-else>
               <h2>Restricted Access</h2>
@@ -44,15 +50,19 @@ import axios from "axios";
 export default {
   data() {
     return {
-      course: [],
+      course: {},
+      lessons: [],
+      activeLesson: null,
     };
   },
   mounted() {
     const baseUrl = "http://127.0.0.1:8000";
     const slug = this.$route.params.slug;
     axios.get(`${baseUrl}/api/v1/courses/${slug}`).then((response) => {
-      this.course = response.data;
-      console.log(response.data);
+      this.course = response.data.course;
+      this.lessons = response.data.lessons;
+      console.log(this.course);
+      console.log(this.lessons);
     });
   },
 };
