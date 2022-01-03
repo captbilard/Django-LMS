@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 
-from .models import Comments, Courses, Lessons
-from courses.serializers import CourseListSerializer, CourseDetailSerializer, LessonListSerializer
+from .models import Courses, Lessons, Comments
+from courses.serializers import CommentsSerializer, CourseListSerializer, CourseDetailSerializer, LessonListSerializer
 
 
 # Create your views here.
@@ -27,7 +27,11 @@ def get_individual_course(request, slug):
     }
     return Response(data, status=status.HTTP_200_OK)
 
-
+@api_view(['GET'])
+def get_comment(request,course_slug, lesson_slug):
+    lesson = Lessons.objects.get(slug=lesson_slug)
+    comments_serializer = CommentsSerializer(lesson.comments.all(), many=True)
+    return Response(comments_serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def add_comment(request, course_slug, lesson_slug):
