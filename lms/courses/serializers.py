@@ -16,3 +16,9 @@ class LessonListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lessons
         fields = ('id','title','slug', 'short_description', 'long_description')
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ('id','name','content','created_at')
