@@ -32,8 +32,8 @@ def get_individual_course(request, slug):
 @api_view(['POST'])
 def add_comment(request, course_slug, lesson_slug):
     data = request.data
-    name = data.GET['name']
-    content = data.GET['content']
+    name = data.get('name')
+    content = data.get('content')
     course = Courses.objects.get(slug=course_slug)
     lesson = Lessons.objects.get(slug=lesson_slug)
     created_by = request.user
