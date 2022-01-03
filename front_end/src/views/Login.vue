@@ -108,13 +108,13 @@ export default {
         .then((response) => {
           //get the token from the sever
           const token = response.data.auth_token;
-
+          console.log(token);
           // update it in the store through mutations
           this.$store.commit("setToken", token);
 
           //set the token to the header using axios
-          axios.defaults.headers.common["Authorization"] = token;
-
+          axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+          console.log(axios.defaults.headers.common["Authorization"])
           // save it in localstorage incase of user refreshes
           localStorage.setItem("token", token);
 
