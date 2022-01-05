@@ -13,7 +13,7 @@
             <h3>Table of Contents</h3>
             <ul>
               <li v-for="lesson in lessons" :key="lesson.id">
-                <a href="#" @click="activeLesson=lesson">{{ lesson.title }}</a>
+                <a href="#" @click="setActiveLesson(lesson)">{{ lesson.title }}</a>
               </li>
               
             </ul>
@@ -27,6 +27,17 @@
                   {{activeLesson.long_description}}
                 </p>
                 <hr>
+                <article class="media box" v-for="comment in comments" :key="comment.id">
+                  <div class="media-content">
+                    <div class="content">
+                      <p>
+                        <strong>{{ comment.name }}</strong> {{ comment.created_at }} <br>
+                          {{comment.content}}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+
                 <form v-on:submit.prevent="submitForm">
                   <div class="field">
                     <label for="name" class="label">Name</label>
@@ -67,11 +78,13 @@
 
 <script>
 import axios from "axios";
+const baseUrl = "http://127.0.0.1:8000"
 export default {
   data() {
     return {
       course: {},
       lessons: [],
+      comments: [],
       activeLesson: null,
       comment: {
         name:'',
@@ -80,7 +93,7 @@ export default {
     };
   },
   mounted() {
-    const baseUrl = "http://127.0.0.1:8000";
+    //const baseUrl = "http://127.0.0.1:8000";
     const slug = this.$route.params.slug;
     axios.get(`${baseUrl}/api/v1/courses/${slug}`).then((response) => {
       this.course = response.data.course;
@@ -89,17 +102,32 @@ export default {
   },
   methods:{
     submitForm: function(){
-      const baseUrl = "http://127.0.0.1:8000";
+      //const baseUrl = "http://127.0.0.1:8000";
       const formData = this.comment
-      //console.log(this.activeLesson.slug);
       axios.post(`${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`, formData)
       .then(response => {
         this.comment.name = ''
         this.comment.content = ''
         alert("This comment was added!")
-        //console.log(response.data);
       })
       .catch(error =>{
+        console.log(error);
+      })
+    },
+
+    setActiveLesson : function(lesson){
+      // loads the current lesson and get the comments for that lesson
+      this.activeLesson = lesson
+      this.getComments()
+    },
+
+    getComments:function (){
+      axios.get(`${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-comments/`)
+      .then(response =>{
+        console.log(response.data)
+        this.comments = response.data
+      })
+      .catch(error => {
         console.log(error);
       })
     }
