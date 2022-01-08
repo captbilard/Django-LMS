@@ -101,8 +101,7 @@ export default {
     }
   },
   mounted(){
-    const baseUrl = "http://127.0.0.1:8000"
-    axios.get(`${baseUrl}/api/v1/courses/`)
+    axios.get(`/api/v1/courses/`,axios.defaults.headers.common["Authorization"])
     .then(response =>{
       this.courses = response.data
       console.log(response.data);
