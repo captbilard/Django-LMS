@@ -42,7 +42,8 @@ def add_comment(request, course_slug, lesson_slug):
     lesson = Lessons.objects.get(slug=lesson_slug)
     created_by = request.user
 
-    Comments.objects.create(
+    comment = Comments.objects.create(
         name=name, content=content,course=course,lesson=lesson,created_by=created_by
     )
-    return Response({"message":"Comments added!"}, status=status.HTTP_201_CREATED)
+    serializer = CommentsSerializer(comment)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
