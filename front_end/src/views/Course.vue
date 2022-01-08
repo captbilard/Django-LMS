@@ -51,11 +51,15 @@
                       <textarea name="comment" class="textarea" v-model="comment.content"></textarea>
                     </div>
                   </div>
+                  <div class="notification is-danger" v-for="error in errors" :key="error">
+                    <p>{{error}}</p>
+                  </div>
                   <div class="field">
                     <div class="control">
                       <button class="button is-link">Submit</button>
                     </div>
                   </div>
+
                 </form>
               </template>
               <template v-else>
@@ -85,6 +89,7 @@ export default {
       course: {},
       lessons: [],
       comments: [],
+      errors: [],
       activeLesson: null,
       comment: {
         name:'',
@@ -102,17 +107,27 @@ export default {
   },
   methods:{
     submitForm: function(){
-      //const baseUrl = "http://127.0.0.1:8000";
-      const formData = this.comment
-      axios.post(`${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`, formData)
-      .then(response => {
-        this.comment.name = ''
-        this.comment.content = ''
-        alert("This comment was added!")
-      })
-      .catch(error =>{
-        console.log(error);
-      })
+      this.errors = []
+      if(this.comment.name == ''){
+        this.errors.push("The name should be filled out")
+      }
+      if(this.comment.content == ''){
+        this.errors.push("The content should be filled out")
+      }
+
+      if(!this.errors){
+        const formData = this.comment
+        axios.post(`${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`, formData)
+        .then(response => {
+          this.comment.name = ''
+          this.comment.content = ''
+          alert("This comment was added!")
+        })
+        .catch(error =>{
+          console.log(error);
+        })
+
+      }
     },
 
     setActiveLesson : function(lesson){
