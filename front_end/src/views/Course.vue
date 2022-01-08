@@ -98,9 +98,8 @@ export default {
     };
   },
   mounted() {
-    //const baseUrl = "http://127.0.0.1:8000";
     const slug = this.$route.params.slug;
-    axios.get(`${baseUrl}/api/v1/courses/${slug}`).then((response) => {
+    axios.get(`/api/v1/courses/${slug}`).then((response) => {
       this.course = response.data.course;
       this.lessons = response.data.lessons;
     });
@@ -115,13 +114,13 @@ export default {
         this.errors.push("The content should be filled out")
       }
 
-      if(!this.errors){
+      if(!this.errors.length){
         const formData = this.comment
         axios.post(`${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`, formData)
         .then(response => {
           this.comment.name = ''
           this.comment.content = ''
-          alert("This comment was added!")
+          this.comments.push(response.data)
         })
         .catch(error =>{
           console.log(error);

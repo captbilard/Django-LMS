@@ -102,9 +102,8 @@ export default {
     },
 
     loginForm: function (formData) {
-      const baseUrl = "http://127.0.0.1:8000";
       axios
-        .post(`${baseUrl}/api/v1/token/login/`, formData)
+        .post(`/api/v1/token/login/`, formData)
         .then((response) => {
           //get the token from the sever
           const token = response.data.auth_token;
@@ -113,7 +112,7 @@ export default {
           this.$store.commit("setToken", token);
 
           //set the token to the header using axios
-          axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+          axios.defaults.headers.common = {'Authorization': `Token ${token}`};
           console.log(axios.defaults.headers.common["Authorization"])
           // save it in localstorage incase of user refreshes
           localStorage.setItem("token", token);
