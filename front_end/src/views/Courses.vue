@@ -23,32 +23,12 @@
 
           <div class="column is-10">
             <div class="columns is-multiline">
-              <div class="column is-4" v-for="course in courses" :key="course.id">
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img
-                        src="../assets/placeholder.jpg"
-                        alt="Learning Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-content">
-                        <p class="title is-5">
-                          {{course.title}}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="content">
-                      <p>
-                        {{course.short_description}}
-                      </p>
-                      <p class="has-text-left"><router-link :to="{name:'Course', params: {slug:course.slug}}">More</router-link></p>
-                    </div>
-                  </div>
-                </div>
+              <div
+                class="column is-4"
+                v-for="course in courses"
+                :key="course.id"
+              >
+                <CourseItem v-bind:course="course" />
               </div>
 
               <div class="column is-12">
@@ -93,19 +73,24 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
+import CourseItem from "@/components/CourseItem.vue";
 export default {
-  data(){
-    return{
-      courses: []
-    }
+  data() {
+    return {
+      courses: [],
+    };
   },
-  mounted(){
-    axios.get(`/api/v1/courses/`,axios.defaults.headers.common["Authorization"])
-    .then(response =>{
-      this.courses = response.data
-      console.log(response.data);
-    })
-  }
-}
+  components: {
+    CourseItem,
+  },
+  mounted() {
+    axios
+      .get(`/api/v1/courses/`, axios.defaults.headers.common["Authorization"])
+      .then((response) => {
+        this.courses = response.data;
+        console.log(response.data);
+      });
+  },
+};
 </script>

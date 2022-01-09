@@ -112,8 +112,8 @@ export default {
           this.$store.commit("setToken", token);
 
           //set the token to the header using axios
-          axios.defaults.headers.common = {'Authorization': `Token ${token}`};
-          console.log(axios.defaults.headers.common["Authorization"])
+          axios.defaults.headers.common = { Authorization: `Token ${token}` };
+          console.log(axios.defaults.headers.common["Authorization"]);
           // save it in localstorage incase of user refreshes
           localStorage.setItem("token", token);
 

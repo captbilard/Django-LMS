@@ -3,8 +3,7 @@
     <div class="hero is-primary is-medium">
       <div class="hero-body has-text-centered">
         <p class="title">Welcome to L.M.S</p>
-        <p class="subtitle">The central location for your child's learning </p>
-
+        <p class="subtitle">The central location for your child's learning</p>
       </div>
     </div>
 
@@ -41,13 +40,11 @@
             </div>
           </div>
 
-          <!-- <div class="buttons has-text-centered">
-            <button class="button is-primary is-large">Click To Get Started</button>
-          </div> -->
           <div class="column is-12 has-text-centered">
-            <a href="#" class="button is-primary is-size-3 my-6">Click To Get Started</a>
+            <a href="#" class="button is-primary is-size-3 my-6"
+              >Click To Get Started</a
+            >
           </div>
-
         </div>
       </div>
     </section>
@@ -59,6 +56,6 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'Home'
-}
+  name: "Home",
+};
 </script>
