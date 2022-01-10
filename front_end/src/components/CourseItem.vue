@@ -12,7 +12,7 @@
             {{ course.title }}
           </p>
         </div>
-      </div>
+      </div> 
       <div class="content">
         <p>
           {{ course.short_description }}
