@@ -20,4 +20,4 @@ def update_pythonanywhere(request):
 
         return HttpResponse("Code has been updated on pythonanywhere", status= 200)
     else:
-        return HttpResponse("Code update failed ononAnywhere")
+        return HttpResponse("Method not allowed", status=405)
