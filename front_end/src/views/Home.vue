@@ -45,6 +45,16 @@
               >Click To Get Started</a
             >
           </div>
+
+          <hr>
+
+          <div
+            class="column is-3"
+            v-for="course in courses"
+            :key="course.id"
+          >
+            <CourseItem v-bind:course="course" />
+          </div>
         </div>
       </div>
     </section>
@@ -53,9 +63,26 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import axios from "axios";
+import CourseItem from "@/components/CourseItem.vue";
 
 export default {
   name: "Home",
+  data() {
+    return {
+      courses: [],
+    };
+  },
+  components: {
+    CourseItem,
+  },
+  mounted() {
+    axios
+      .get(`/api/v1/courses/get_frontpage_courses/`)
+      .then((response) => {
+        this.courses = response.data;
+        // console.log(response.data);
+      });
+  },
 };
 </script>
