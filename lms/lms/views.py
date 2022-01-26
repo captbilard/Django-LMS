@@ -13,7 +13,8 @@ def update_pythonanywhere(request):
         stored on PythonAnywhere in the git.Repo() as parameter.
         Here the name of my directory is "test.pythonanywhere.com"
         '''
-        repo = git.Repo("django_lms.pythonanywhere.com/")
+        repo = git.Repo(search_parent_directories=True)
+        print(repo)
         origin = repo.remotes.origin
 
         origin.pull()

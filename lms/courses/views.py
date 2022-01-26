@@ -17,6 +17,12 @@ def get_courses(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+def get_front_page_courses(request):
+    courses = Courses.objects.all()[0:4]
+    serializer = CourseListSerializer(courses, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
 def get_individual_course(request, slug):
     course = Courses.objects.get(slug=slug)
     course_serializer = CourseDetailSerializer(course)
