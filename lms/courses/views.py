@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework import serializers, status
 
 from .models import Courses, Lessons, Comments
@@ -11,12 +12,14 @@ from courses.serializers import CommentsSerializer, CourseListSerializer, Course
 # Create your views here.
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_courses(request):
     courses = Courses.objects.all()
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_front_page_courses(request):
     courses = Courses.objects.all()[0:4]
     serializer = CourseListSerializer(courses, many=True)
