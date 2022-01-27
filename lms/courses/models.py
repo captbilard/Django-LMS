@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,12 +23,19 @@ class Courses(models.Model):
     short_description = models.TextField(blank=True, null=True)
     long_description = models.TextField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
+    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Courses"
     
     def __str__(self):
         return self.title
+    
+    def get_image(self):
+        if self.image:
+            return f'{settings.WEBSITE_URL}{self.image.url}' 
+        else:
+            return f'https://bulma.io/images/placeholders/1280x960.png'
 
 
 class Lessons(models.Model):
