@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.shortcuts import render
 
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ from courses.serializers import CommentsSerializer, CourseListSerializer, Course
 # Create your views here.
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_categories(request):
     categories = Categories.objects.all()
     serializer = CategoriesSerializer(categories, many=True)
@@ -20,7 +22,10 @@ def get_categories(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_courses(request):
+    category_id = request.GET.get('category_id','')
     courses = Courses.objects.all()
+    if category_id is not '':
+        courses = courses.filter(category__id= category_id)
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

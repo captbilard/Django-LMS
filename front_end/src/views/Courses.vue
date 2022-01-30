@@ -13,10 +13,19 @@
             <aside class="menu">
               <p class="menu-label">Categories</p>
               <ul class="menu-list">
-                <li><a href="" class="is-active">All Courses</a></li>
-                <li><a href="">Programming</a></li>
-                <li><a href="">Design</a></li>
-                <li><a href="">UX</a></li>
+                <li @click="setActiveCategory(category)">
+                  <a > All Courses </a>
+                </li>
+                <li
+                  v-for="category in categories"
+                  :key="category.id"
+                  @click="setActiveCategory(category)"
+                >
+                  <a >{{
+                    category.title
+                  }}
+                  </a>
+                </li>
               </ul>
             </aside>
           </div>
@@ -79,18 +88,44 @@ export default {
   data() {
     return {
       courses: [],
+      categories: [],
+      activeCategory: null,
     };
   },
   components: {
     CourseItem,
   },
-  mounted() {
-    axios
-      .get(`/api/v1/courses/`, axios.defaults.headers.common["Authorization"])
+  async mounted() {
+    await axios
+      .get("/api/v1/courses/get_categories")
       .then((response) => {
-        this.courses = response.data;
-        console.log(response.data);
+        this.categories = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
       });
+    this.getCourses()
+  },
+  methods: {
+    setActiveCategory: function (category) {
+      console.log(category);
+      this.activeCategory = category
+      this.getCourses()
+    },
+    getCourses: function () {
+      let url = "/api/v1/courses/";
+      if(this.activeCategory){
+        url += `?category_id=${this.activeCategory.id}`
+      }
+      axios
+        .get(url)
+        .then((response) => {
+          this.courses = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

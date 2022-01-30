@@ -6,7 +6,7 @@ from .models import Comments, Courses, Lessons, Categories
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ('title', 'slug')
+        fields = ('id','title', 'slug')
 
 class CourseListSerializer(serializers.ModelSerializer):
     class Meta:
