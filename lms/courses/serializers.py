@@ -1,6 +1,12 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Comments, Courses, Lessons
+from .models import Comments, Courses, Lessons, Categories
+
+
+class CategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categories
+        fields = ('title', 'slug')
 
 class CourseListSerializer(serializers.ModelSerializer):
     class Meta:
