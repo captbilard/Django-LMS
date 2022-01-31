@@ -67,8 +67,6 @@ class Lessons(models.Model):
         verbose_name_plural = "Lessons"
         ordering  = ['id']
     
-    def __str__(self):
-        return self.title
 
 
 class Comments(models.Model):
