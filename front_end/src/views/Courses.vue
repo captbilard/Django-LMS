@@ -14,17 +14,14 @@
               <p class="menu-label">Categories</p>
               <ul class="menu-list">
                 <li @click="setActiveCategory(category)">
-                  <a > All Courses </a>
+                  <a> All Courses </a>
                 </li>
                 <li
                   v-for="category in categories"
                   :key="category.id"
                   @click="setActiveCategory(category)"
                 >
-                  <a >{{
-                    category.title
-                  }}
-                  </a>
+                  <a>{{ category.title }} </a>
                 </li>
               </ul>
             </aside>
@@ -104,18 +101,18 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-    this.getCourses()
+    this.getCourses();
   },
   methods: {
     setActiveCategory: function (category) {
       console.log(category);
-      this.activeCategory = category
-      this.getCourses()
+      this.activeCategory = category;
+      this.getCourses();
     },
     getCourses: function () {
       let url = "/api/v1/courses/";
-      if(this.activeCategory){
-        url += `?category_id=${this.activeCategory.id}`
+      if (this.activeCategory) {
+        url += `?category_id=${this.activeCategory.id}`;
       }
       axios
         .get(url)
