@@ -102,6 +102,8 @@ export default {
         console.log(error);
       });
     this.getCourses();
+
+    document.title = `Courses | LMS`;
   },
   methods: {
     setActiveCategory: function (category) {

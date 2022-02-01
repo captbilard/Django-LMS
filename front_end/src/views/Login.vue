@@ -74,6 +74,9 @@ export default {
       errors: [],
     };
   },
+  mounted() {
+    document.title = `Login | LMS`;
+  },
 
   methods: {
     checkForm: function () {

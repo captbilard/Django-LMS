@@ -109,36 +109,38 @@ export default {
       password2: null,
     };
   },
+  mounted() {
+    document.title = `SignUp | LMS`;
+  },
   methods: {
     checkForm: function () {
       this.errors = [];
 
-      // if (!this.username) {
-      //   this.errors.push("Username is required");
-      // }
       if (!this.email) {
         this.errors.push("Email is required");
       } else if (!this.validEmail(this.email)) {
         this.errors.push("Valid email is required");
       }
+
       if (!this.password) {
         this.errors.push("Password is required");
       } else if (!this.validPassword(this.password)) {
         this.errors.push("Password doesn't meet the minimum requirements");
       }
+
       if (!this.password2 && this.password !== this.password2) {
         this.errors.push("Passwords don't match");
       }
+
       if (!this.errors.length) {
         let formData = {
           username: this.email,
           email: this.email,
           password: this.password,
         };
-        //submitForm(formData)
-        const baseUrl = "http://127.0.0.1:8000";
+
         axios
-          .post(`${baseUrl}/api/v1/users/`, formData)
+          .post(`/api/v1/users/`, formData)
           .then((response) => {
             this.$router.push("/login");
           })
@@ -168,16 +170,6 @@ export default {
       let re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
       return re.test(password);
     },
-
-    // submitForm: function (formData){
-    //     axios.post('/api/v1/users/', formData)
-    //     .then((response) => {
-    //         this.$router.push('/login')
-    //     })
-    //     .catch((error)=>{
-    //         console.log(error);
-    //     })
-    // },
 
     clearError: function () {
       const notification = document.querySelector(".notification");
