@@ -41,7 +41,7 @@
           </div>
 
           <div class="column is-12 has-text-centered">
-            <a href="#" class="button is-primary is-size-3 my-6"
+            <a @click="$router.push('sign-up')" class="button is-primary is-size-3 my-6"
               >Click To Get Started</a
             >
           </div>
@@ -80,7 +80,7 @@ export default {
         // console.log(response.data);
       });
 
-    document.title = `Home | LMS`;
+    document.title = `Welcome | LMS`;
   },
 };
 </script>
