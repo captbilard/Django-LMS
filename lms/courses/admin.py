@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Categories, Courses, Lessons, Comments
+from .models import Categories, Courses, Lessons, Comments, Quiz
 
 # Register your models here.
 
@@ -18,3 +18,4 @@ admin.site.register(Categories)
 admin.site.register(Courses)
 admin.site.register(Lessons, LessonAdmin)
 admin.site.register(Comments)
+admin.site.register(Quiz)

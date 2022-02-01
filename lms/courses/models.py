@@ -1,3 +1,5 @@
+from pyexpat import model
+from tabnanny import verbose
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
@@ -83,3 +85,14 @@ class Comments(models.Model):
 
     def __str__(self):
         return f'Comment on {self.lesson}'
+
+class Quiz(models.Model):
+    lesson = models.ForeignKey(Lessons, on_delete=models.CASCADE)
+    question = models.CharField(max_length=200,null=True)
+    answer = models.CharField(max_length=200, null=True)
+    option1 = models.CharField(max_length=200, null=True)
+    option2 = models.CharField(max_length=200, null=True)
+    option3 = models.CharField(max_length=200, null=True)
+
+    class Meta:
+        verbose_name_plural = "Quiz"
