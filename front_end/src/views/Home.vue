@@ -46,13 +46,9 @@
             >
           </div>
 
-          <hr>
+          <hr />
 
-          <div
-            class="column is-3"
-            v-for="course in courses"
-            :key="course.id"
-          >
+          <div class="column is-3" v-for="course in courses" :key="course.id">
             <CourseItem v-bind:course="course" />
           </div>
         </div>
@@ -76,13 +72,15 @@ export default {
   components: {
     CourseItem,
   },
-  mounted() {
-    axios
+  async mounted() {
+    await axios
       .get(`/api/v1/courses/get_frontpage_courses/`)
       .then((response) => {
         this.courses = response.data;
         // console.log(response.data);
       });
+
+    document.title = `Home | LMS`;
   },
 };
 </script>

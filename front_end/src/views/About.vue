@@ -1,9 +1,8 @@
 <template>
   <div class="about">
-    <div class="hero is-primary ">
+    <div class="hero is-primary">
       <div class="hero-body has-text-centered">
         <p class="title">About L.M.S</p>
-
       </div>
     </div>
     <section class="section">
@@ -11,3 +10,11 @@
     </section>
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    document.title = `About | LMS`;
+  },
+};
+</script>

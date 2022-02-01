@@ -115,12 +115,15 @@ export default {
       },
     };
   },
-  mounted() {
+  async mounted() {
     const slug = this.$route.params.slug;
-    axios.get(`/api/v1/courses/${slug}`).then((response) => {
+
+    await axios.get(`/api/v1/courses/${slug}`).then((response) => {
       this.course = response.data.course;
       this.lessons = response.data.lessons;
     });
+
+    document.title = `${this.course.title} | LMS`;
   },
   methods: {
     submitForm: function () {
