@@ -6,13 +6,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework import serializers, status
 
-from .models import Courses, Lessons, Comments, Categories
+from .models import Courses, Lessons, Comments, Categories, Quiz
 from courses.serializers import (
     CommentsSerializer,
     CourseListSerializer,
     CourseDetailSerializer,
     LessonListSerializer,
     CategoriesSerializer,
+    QuizSerializer,
 )
 
 
@@ -84,3 +85,10 @@ def add_comment(request, course_slug, lesson_slug):
     )
     serializer = CommentsSerializer(comment)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+def get_quiz(request, course_slug, lesson_slug):
+    lesson = Lessons.objects.get(slug=lesson_slug)
+    serializer = QuizSerializer(lesson.quiz.first())
+    return Response(serializer.data, status=status.HTTP_200_OK)
