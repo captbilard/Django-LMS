@@ -28,6 +28,32 @@
                   {{ activeLesson.long_description }}
                 </p>
                 <hr />
+                <template v-if="activeLesson.lesson_type === 'Quiz'">
+                  <h2>{{quiz.question}}</h2>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" name="selectedAnswer" :value="quiz.option1" v-model="selectedAnswer">
+                      {{quiz.option1}}
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" name="selectedAnswer" :value="quiz.option2" v-model="selectedAnswer">
+                        {{quiz.option2}}
+                    </label>
+                  </div>
+                  <div class="control">
+                    <label class="radio">
+                      <input type="radio" name="selectedAnswer" :value="quiz.option3" v-model="selectedAnswer">
+                        {{quiz.option3}}
+                    </label>
+                  </div>
+                  <div class="control mt-4 mb-4">
+                    <button class="button is-info">Submit</button>
+                  </div>
+
+                </template>
+
                 <article
                   class="media box"
                   v-for="comment in comments"
@@ -100,7 +126,6 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "http://127.0.0.1:8000";
 export default {
   data() {
     return {
@@ -108,6 +133,8 @@ export default {
       lessons: [],
       comments: [],
       errors: [],
+      quiz: {},
+      selectedAnswer: "",
       activeLesson: null,
       comment: {
         name: "",
@@ -139,7 +166,7 @@ export default {
         const formData = this.comment;
         axios
           .post(
-            `${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`,
+            `/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`,
             formData
           )
           .then((response) => {
@@ -156,22 +183,36 @@ export default {
     setActiveLesson: function (lesson) {
       // loads the current lesson and get the comments for that lesson
       this.activeLesson = lesson;
-      this.getComments();
+      if(this.activeLesson.lesson_type == "Quiz"){
+        this.getQuiz()
+      }else{
+        this.getComments();
+      }
     },
 
     getComments: function () {
       axios
         .get(
-          `${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-comments/`
+          `/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-comments/`
         )
         .then((response) => {
-          console.log(response.data);
           this.comments = response.data;
         })
         .catch((error) => {
           console.log(error);
         });
     },
+    getQuiz : function(){
+      axios.get(`/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-quiz/`)
+      .then((response) => {
+        console.log(response.data);
+        this.quiz = response.data
+
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
   },
 };
 </script>
