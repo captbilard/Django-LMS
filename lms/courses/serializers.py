@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Comments, Courses, Lessons, Categories
+from .models import Comments, Courses, Lessons, Categories, Quiz
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
@@ -28,3 +28,8 @@ class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ('id','name','content','created_at')
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = ('id', 'lesson', 'question','answer','option1','option2','option3')

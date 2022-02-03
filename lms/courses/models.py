@@ -1,5 +1,3 @@
-from pyexpat import model
-from tabnanny import verbose
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
@@ -95,4 +93,4 @@ class Quiz(models.Model):
     option3 = models.CharField(max_length=200, null=True)
 
     class Meta:
-        verbose_name_plural = "Quiz"
+        verbose_name_plural = "Quizzes"
