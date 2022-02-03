@@ -36,7 +36,7 @@
                       {{quiz.option1}}
                     </label>
                   </div>
-                  <div class="control">
+                  <div class="control mt-3 mb-3">
                     <label class="radio">
                       <input type="radio" name="selectedAnswer" :value="quiz.option2" v-model="selectedAnswer">
                         {{quiz.option2}}
@@ -48,10 +48,19 @@
                         {{quiz.option3}}
                     </label>
                   </div>
-                  <div class="control mt-4 mb-4">
-                    <button class="button is-info">Submit</button>
+                  <div class="control mt-4">
+                    <button class="button is-info" @click="submitQuiz">Submit</button>
                   </div>
 
+                  <template v-if="quizAnswer == 'correct'">
+                    <div class="notification is-success is-light mt-4"> You are correct</div>
+                  </template>
+                  <template v-if="quizAnswer == 'incorrect'">
+                    <div class="notification is-danger is-light mt-4"> 
+                      <button class="delete"></button>
+                      That is not correct
+                    </div>
+                  </template>
                 </template>
 
                 <article
@@ -135,6 +144,7 @@ export default {
       errors: [],
       quiz: {},
       selectedAnswer: "",
+      quizAnswer: null,
       activeLesson: null,
       comment: {
         name: "",
@@ -151,6 +161,17 @@ export default {
     });
 
     document.title = `${this.course.title} | LMS`;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+
+        const $notification = $delete.parentNode;
+
+        $delete.addEventListener('click', () => {
+          $notification.parentNode.removeChild($notification);
+        });
+      });
+    });
   },
   methods: {
     submitForm: function () {
@@ -207,11 +228,23 @@ export default {
       .then((response) => {
         console.log(response.data);
         this.quiz = response.data
-
       })
       .catch((error) => {
         console.log(error);
       })
+    },
+    submitQuiz: function(){
+      this.quizAnswer = null
+
+      if(this.selectedAnswer){
+        if(this.selectedAnswer === this.quiz.answer){
+          this.quizAnswer = "correct"
+        }else{
+          this.quizAnswer = "incorrect"
+        }
+      }else{
+        alert("You must select an answer first")
+      }
     }
   },
 };
