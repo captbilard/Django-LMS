@@ -28,57 +28,112 @@
                   {{ activeLesson.long_description }}
                 </p>
                 <hr />
-                <article
-                  class="media box"
-                  v-for="comment in comments"
-                  :key="comment.id"
-                >
-                  <div class="media-content">
-                    <div class="content">
-                      <p>
-                        <strong>{{ comment.name }}</strong>
-                        {{ comment.created_at }} <br />
-                        {{ comment.content }}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-
-                <form v-on:submit.prevent="submitForm">
-                  <div class="field">
-                    <label for="name" class="label">Name</label>
-                    <div class="control">
+                <template v-if="activeLesson.lesson_type === 'Quiz'">
+                  <h2>{{ quiz.question }}</h2>
+                  <div class="control">
+                    <label class="radio">
                       <input
-                        type="text"
-                        name="name"
-                        class="input"
-                        v-model="comment.name"
+                        type="radio"
+                        name="selectedAnswer"
+                        :value="quiz.option1"
+                        v-model="selectedAnswer"
                       />
-                    </div>
+                      {{ quiz.option1 }}
+                    </label>
                   </div>
-                  <div class="field">
-                    <label for="comment" class="label">Comment</label>
-                    <div class="control">
-                      <textarea
-                        name="comment"
-                        class="textarea"
-                        v-model="comment.content"
-                      ></textarea>
-                    </div>
+                  <div class="control mt-3 mb-3">
+                    <label class="radio">
+                      <input
+                        type="radio"
+                        name="selectedAnswer"
+                        :value="quiz.option2"
+                        v-model="selectedAnswer"
+                      />
+                      {{ quiz.option2 }}
+                    </label>
                   </div>
-                  <div
-                    class="notification is-danger"
-                    v-for="error in errors"
-                    :key="error"
+                  <div class="control">
+                    <label class="radio">
+                      <input
+                        type="radio"
+                        name="selectedAnswer"
+                        :value="quiz.option3"
+                        v-model="selectedAnswer"
+                      />
+                      {{ quiz.option3 }}
+                    </label>
+                  </div>
+                  <div class="control mt-4">
+                    <button class="button is-info" @click="submitQuiz">
+                      Submit
+                    </button>
+                  </div>
+
+                  <template v-if="quizAnswer == 'correct'">
+                    <div class="notification is-success is-light mt-4">
+                      You are correct
+                    </div>
+                  </template>
+                  <template v-if="quizAnswer == 'incorrect'">
+                    <div class="notification is-danger is-light mt-4">
+                      That is not correct
+                    </div>
+                  </template>
+                </template>
+
+                <template v-if="activeLesson.lesson_type === 'Article'">
+                  <article
+                    class="media box"
+                    v-for="comment in comments"
+                    :key="comment.id"
                   >
-                    <p>{{ error }}</p>
-                  </div>
-                  <div class="field">
-                    <div class="control">
-                      <button class="button is-link">Submit</button>
+                    <div class="media-content">
+                      <div class="content">
+                        <p>
+                          <strong>{{ comment.name }}</strong>
+                          {{ comment.created_at }} <br />
+                          {{ comment.content }}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </article>
+
+                  <form v-on:submit.prevent="submitForm">
+                    <div class="field">
+                      <label for="name" class="label">Name</label>
+                      <div class="control">
+                        <input
+                          type="text"
+                          name="name"
+                          class="input"
+                          v-model="comment.name"
+                        />
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label for="comment" class="label">Comment</label>
+                      <div class="control">
+                        <textarea
+                          name="comment"
+                          class="textarea"
+                          v-model="comment.content"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div
+                      class="notification is-danger"
+                      v-for="error in errors"
+                      :key="error"
+                    >
+                      <p>{{ error }}</p>
+                    </div>
+                    <div class="field">
+                      <div class="control">
+                        <button class="button is-link">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                </template>
               </template>
               <template v-else>
                 <!-- <h3>Introduction</h3> -->
@@ -100,7 +155,6 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "http://127.0.0.1:8000";
 export default {
   data() {
     return {
@@ -108,6 +162,9 @@ export default {
       lessons: [],
       comments: [],
       errors: [],
+      quiz: {},
+      selectedAnswer: "",
+      quizAnswer: null,
       activeLesson: null,
       comment: {
         name: "",
@@ -124,6 +181,18 @@ export default {
     });
 
     document.title = `${this.course.title} | LMS`;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      (document.querySelectorAll(".notification .delete") || []).forEach(
+        ($delete) => {
+          const $notification = $delete.parentNode;
+
+          $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+          });
+        }
+      );
+    });
   },
   methods: {
     submitForm: function () {
@@ -139,7 +208,7 @@ export default {
         const formData = this.comment;
         axios
           .post(
-            `${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`,
+            `/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/`,
             formData
           )
           .then((response) => {
@@ -156,21 +225,50 @@ export default {
     setActiveLesson: function (lesson) {
       // loads the current lesson and get the comments for that lesson
       this.activeLesson = lesson;
-      this.getComments();
+      if (this.activeLesson.lesson_type == "Quiz") {
+        this.getQuiz();
+      } else {
+        this.getComments();
+      }
     },
 
     getComments: function () {
       axios
         .get(
-          `${baseUrl}/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-comments/`
+          `/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-comments/`
         )
         .then((response) => {
-          console.log(response.data);
           this.comments = response.data;
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    getQuiz: function () {
+      axios
+        .get(
+          `/api/v1/courses/${this.course.slug}/${this.activeLesson.slug}/get-quiz/`
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.quiz = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    submitQuiz: function () {
+      this.quizAnswer = null;
+
+      if (this.selectedAnswer) {
+        if (this.selectedAnswer === this.quiz.answer) {
+          this.quizAnswer = "correct";
+        } else {
+          this.quizAnswer = "incorrect";
+        }
+      } else {
+        alert("You must select an answer first");
+      }
     },
   },
 };
