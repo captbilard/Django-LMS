@@ -20,6 +20,12 @@ from courses.serializers import (
 
 class CoursesTest(APITestCase):
     def setUp(self):
+        # User authentication
+        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="Testpass123*")
+        self.user.save()
+        token = Token.objects.create(user=self.user)
+        token.save()
+
         self.category = Categories.objects.create(title="design", slug="design-course")
         self.course = Courses.objects.create(title="The design course",slug="the-design-course")
         self.course1 = Courses.objects.create(title="Course1",slug="course-1")
@@ -33,12 +39,9 @@ class CoursesTest(APITestCase):
         self.course4.category.add(self.category)
         self.lesson = Lessons.objects.create(course=self.course, title="Design-lesson", slug="design-lesson")
 
-        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="Testpass123*")
-        self.user.save()
-        token = Token.objects.create(user=self.user)
-        token.save()
 
     def _require_login(self):
+        # Logs the user in
         self.client.login(username="test@example.com", password="Testpass123*")
     
 
@@ -102,5 +105,15 @@ class CoursesTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Comments.objects.count(), 1)
         self.assertEqual(Comments.objects.get().name, 'Test_user')
+    
+    def test_get_comment(self):
+        """
+        Get comments from a lesson
+        """
+        self._require_login()
+        url = reverse("get_comment", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        serializer = CommentsSerializer(self.lesson.comments.all(), many=True)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertCountEqual(response.data, serializer.data)
         
-
