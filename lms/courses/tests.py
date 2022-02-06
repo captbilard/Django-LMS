@@ -1,5 +1,7 @@
 # from django.test import TestCase
-import json
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -29,6 +31,16 @@ class CoursesTest(APITestCase):
         self.course2.category.add(self.category)
         self.course3.category.add(self.category)
         self.course4.category.add(self.category)
+        self.lesson = Lessons.objects.create(course=self.course, title="Design-lesson", slug="design-lesson")
+
+        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="Testpass123*")
+        self.user.save()
+        token = Token.objects.create(user=self.user)
+        token.save()
+
+    def _require_login(self):
+        self.client.login(username="test@example.com", password="Testpass123*")
+    
 
     def test_get_categories(self):
         """
@@ -61,4 +73,20 @@ class CoursesTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertCountEqual(response.data, serializer.data)
+    
+    def test_get_individual_course(self):
+        """
+        Get course details
+        """
+        self._require_login()
+        url = reverse("get_individual_course", kwargs={'slug':self.course.slug})
+        course_serializer = CourseDetailSerializer(self.course)
+        lessons_serializer = LessonListSerializer(self.course.lessons.all(), many=True)
+        data = {
+            "course": course_serializer.data,
+            "lessons": lessons_serializer.data,
+        }
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, data)
 
