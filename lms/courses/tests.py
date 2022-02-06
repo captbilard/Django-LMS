@@ -38,6 +38,7 @@ class CoursesTest(APITestCase):
         self.course3.category.add(self.category)
         self.course4.category.add(self.category)
         self.lesson = Lessons.objects.create(course=self.course, title="Design-lesson", slug="design-lesson")
+        self.quiz = Quiz.objects.create(lesson=self.lesson, question="What is Django", answer="It's a framework", option1="A web script", option2="It's a framework",option3="None of the above")
 
 
     def _require_login(self):
@@ -115,5 +116,16 @@ class CoursesTest(APITestCase):
         serializer = CommentsSerializer(self.lesson.comments.all(), many=True)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertCountEqual(response.data, serializer.data)
+        self.assertEqual(response.data, serializer.data)
+    
+    def test_get_quiz(self):
+        """
+        Get's quiz for a lesson
+        """
+        self._require_login()
+        url = reverse("get_quiz", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        serializer = QuizSerializer(self.quiz)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
         
