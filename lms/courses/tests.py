@@ -90,3 +90,17 @@ class CoursesTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
+    
+    def test_add_comment(self):
+        """
+        Add comments to a lesson
+        """
+        self._require_login()
+        url = reverse("add_comment", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        data = {'course':self.course.id, 'lesson':self.lesson.id, 'name':"Test_user",'content':'This is a test comment', 'created_by':self.user.username}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Comments.objects.count(), 1)
+        self.assertEqual(Comments.objects.get().name, 'Test_user')
+        
+
