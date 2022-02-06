@@ -20,6 +20,12 @@ from courses.serializers import (
 
 class CoursesTest(APITestCase):
     def setUp(self):
+        # User authentication
+        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="Testpass123*")
+        self.user.save()
+        token = Token.objects.create(user=self.user)
+        token.save()
+
         self.category = Categories.objects.create(title="design", slug="design-course")
         self.course = Courses.objects.create(title="The design course",slug="the-design-course")
         self.course1 = Courses.objects.create(title="Course1",slug="course-1")
@@ -32,13 +38,11 @@ class CoursesTest(APITestCase):
         self.course3.category.add(self.category)
         self.course4.category.add(self.category)
         self.lesson = Lessons.objects.create(course=self.course, title="Design-lesson", slug="design-lesson")
+        self.quiz = Quiz.objects.create(lesson=self.lesson, question="What is Django", answer="It's a framework", option1="A web script", option2="It's a framework",option3="None of the above")
 
-        self.user = User.objects.create_user(username="test@example.com", email="test@example.com", password="Testpass123*")
-        self.user.save()
-        token = Token.objects.create(user=self.user)
-        token.save()
 
     def _require_login(self):
+        # Logs the user in
         self.client.login(username="test@example.com", password="Testpass123*")
     
 
@@ -90,3 +94,38 @@ class CoursesTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
+    
+    def test_add_comment(self):
+        """
+        Add comments to a lesson
+        """
+        self._require_login()
+        url = reverse("add_comment", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        data = {'course':self.course.id, 'lesson':self.lesson.id, 'name':"Test_user",'content':'This is a test comment', 'created_by':self.user.username}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Comments.objects.count(), 1)
+        self.assertEqual(Comments.objects.get().name, 'Test_user')
+    
+    def test_get_comment(self):
+        """
+        Get comments from a lesson
+        """
+        self._require_login()
+        url = reverse("get_comment", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        serializer = CommentsSerializer(self.lesson.comments.all(), many=True)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+    
+    def test_get_quiz(self):
+        """
+        Get's quiz for a lesson
+        """
+        self._require_login()
+        url = reverse("get_quiz", kwargs={'course_slug':self.course.slug, 'lesson_slug':self.lesson.slug})
+        serializer = QuizSerializer(self.quiz)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+        
