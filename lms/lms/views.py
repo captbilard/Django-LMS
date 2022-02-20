@@ -1,4 +1,4 @@
-import git
+from git import Repo
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -13,10 +13,9 @@ def update_pythonanywhere(request):
         stored on PythonAnywhere in the git.Repo() as parameter.
         Here the name of my directory is "test.pythonanywhere.com"
         '''
-        repo = git.Repo(search_parent_directories=True)
-        print(repo)
+        repo_path = "/home/bilard/Desktop/test_git/Django-LMS"
+        repo = Repo(repo_path)
         origin = repo.remotes.origin
-
         origin.pull()
 
         return HttpResponse("Code has been updated on pythonanywhere", status= 200)

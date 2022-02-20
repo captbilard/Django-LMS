@@ -139,3 +139,5 @@ GitHub.sublime-settings
 todo.txt
 
 ansible.cfg
+roles
+public

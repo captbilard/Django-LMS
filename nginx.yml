@@ -3,18 +3,42 @@
   connection: local
   become: yes
   become_user: root
+  vars:
+    - docroot: /home/bilard/Desktop/Django-LMS/public
   tasks:
+    - name: Add Nginx Repository
+      apt_repository:
+        repo: ppa:nginx/stable
+        state: present
+      register: ppastable
+
     - name: Install Nginx
       apt:
         name: nginx
-        state: present
+        state: latest
         update_cache: true
+      when: ppastable is success
       notify:
         - Start Nginx
 
-# working with handlers, their job is to listen for an event and then run when event is triggered
-  handlers:
-    - name: Start Nginx
-      service:
-        name: nginx
-        state: started
+    - name: Create Web Root
+      file:
+        path: "{{docroot}}"
+        mode: "775"
+        state: directory
+        owner: bilard
+        group: bilard
+      notify:
+        - Reload Nginx
+
+  # working with handlers, their job is to listen for an event and then run when event is triggered
+  # handlers:
+  #   - name: Start Nginx
+  #     service:
+  #       name: nginx
+  #       state: started
+
+  #   - name: Reload Nginx
+  #     service:
+  #       name: nginx
+  #       state: reloaded
