@@ -32,7 +32,7 @@ def get_categories(request):
 def get_courses(request):
     category_id = request.GET.get("category_id", "")
     courses = Courses.objects.all()
-    if category_id is not "":
+    if category_id != "":
         courses = courses.filter(category__id=category_id)
     serializer = CourseListSerializer(courses, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
