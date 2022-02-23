@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render
 
 from rest_framework.response import Response
@@ -52,14 +51,21 @@ def get_front_page_courses(request):
 def get_individual_course(request, slug):
     course = Courses.objects.get(slug=slug)
     course_serializer = CourseDetailSerializer(course)
-    lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
-    if request.user.is_authenticated:
+    #lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
+    if request.user.is_authenticated and request.user.has_perm('courses.premium_user'):
+        lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
         course_data = course_serializer.data
+        lessons_data = lessons_serializer.data
+    elif request.user.is_authenticated and not request.user.has_perm('courses.premium_user'):
+        lessons_serializer = LessonListSerializer(course.lessons.all()[0:2], many=True)
+        course_data = course_serializer.data
+        lessons_data = lessons_serializer.data
     else:
         course_data = {}
+        lessons_data = {}
     data = {
         "course": course_data,
-        "lessons": lessons_serializer.data,
+        "lessons": lessons_data,
     }
     return Response(data, status=status.HTTP_200_OK)
 

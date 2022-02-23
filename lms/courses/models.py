@@ -27,6 +27,9 @@ class Courses(models.Model):
 
     class Meta:
         verbose_name_plural = "Courses"
+        permissions = [
+            ('premium_user', "Can access all lessons")
+        ]
 
     def __str__(self):
         return self.title
