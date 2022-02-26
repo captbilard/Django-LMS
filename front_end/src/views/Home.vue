@@ -42,11 +42,18 @@
 
           <div class="column is-12 has-text-centered">
             <template v-if="$store.state.user.isAuthenticated">
-              <p class="has-text-weight-bold is-capitalized is-size-4 mt-4">Get lifetime access to all courses by going Premium for only $100</p>
-              <a @click="goPremium()" class="button is-primary is-size-3 my-6">Go Premium </a>
+              <p class="has-text-weight-bold is-capitalized is-size-4 mt-4">
+                Get lifetime access to all courses by going Premium for only
+                $100
+              </p>
+              <a @click="goPremium()" class="button is-primary is-size-3 my-6"
+                >Go Premium
+              </a>
             </template>
             <template v-else>
-              <a @click="$router.push('sign-up')" class="button is-primary is-size-3 my-6"
+              <a
+                @click="$router.push('sign-up')"
+                class="button is-primary is-size-3 my-6"
                 >Click To Get Started</a
               >
             </template>
@@ -73,6 +80,7 @@ export default {
   data() {
     return {
       courses: [],
+      stripe: null,
     };
   },
   components: {
@@ -86,12 +94,23 @@ export default {
         // console.log(response.data);
       });
 
-    document.title = `Welcome | LMS`;
+    await this.getPublishableKey();
   },
-  methods:{
-    goPremium: function(){
-      console.log("GO PREMIUM YAY!!!");
-    }
+  methods: {
+    getPublishableKey: function () {
+      axios
+        .get("/api/v1/courses/get_publishable_key/")
+        .then((response) => {
+          this.stripe = Stripe(response.data.publicKey);
+          console.log("Worked");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    goPremium: function () {
+      console.log("Go Premium");
+    },
   },
 };
 </script>
