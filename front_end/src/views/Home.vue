@@ -41,9 +41,15 @@
           </div>
 
           <div class="column is-12 has-text-centered">
-            <a @click="$router.push('sign-up')" class="button is-primary is-size-3 my-6"
-              >Click To Get Started</a
-            >
+            <template v-if="$store.state.user.isAuthenticated">
+              <p class="has-text-weight-bold is-capitalized is-size-4 mt-4">Get lifetime access to all courses by going Premium for only $100</p>
+              <a @click="goPremium()" class="button is-primary is-size-3 my-6">Go Premium </a>
+            </template>
+            <template v-else>
+              <a @click="$router.push('sign-up')" class="button is-primary is-size-3 my-6"
+                >Click To Get Started</a
+              >
+            </template>
           </div>
 
           <hr />
@@ -81,6 +87,11 @@ export default {
       });
 
     document.title = `Welcome | LMS`;
+  },
+  methods:{
+    goPremium: function(){
+      console.log("GO PREMIUM YAY!!!");
+    }
   },
 };
 </script>

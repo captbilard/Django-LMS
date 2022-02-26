@@ -7,7 +7,6 @@ import Login from '../views/Login.vue'
 import Courses from '../views/Courses.vue'
 import Course from '../views/Course.vue'
 
-import Orders from '../views/Orders.vue'
 
 import MyAccount from '../views/dashboard/MyAccount.vue'
 
@@ -46,11 +45,6 @@ const routes = [
     path: "/courses/:slug",
     name: "Course",
     component: Course,
-  },
-  {
-    path: "/orders",
-    name: "Orders",
-    component: Orders,
   },
 
 ]
