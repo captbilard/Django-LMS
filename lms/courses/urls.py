@@ -5,6 +5,7 @@ from .views import *
 
 urlpatterns = [
     path('', get_courses, name="get_courses"),
+    path('get_publishable_key/', get_publishable_key, name="get_publishable_key"),
     path('get_frontpage_courses/', get_front_page_courses, name="get_frontpage_courses"),
     path('get_categories/', get_categories, name="get_categories"),
     path('<slug:slug>/', get_individual_course, name="get_individual_course"),

@@ -1,4 +1,7 @@
+import stripe
+
 from django.shortcuts import render
+from django.conf import settings
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -98,3 +101,10 @@ def get_quiz(request, course_slug, lesson_slug):
     lesson = Lessons.objects.get(slug=lesson_slug)
     serializer = QuizSerializer(lesson.quiz.first())
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_publishable_key(request):
+    stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
+    return Response(stripe_config, status=status.HTTP_200_OK)
