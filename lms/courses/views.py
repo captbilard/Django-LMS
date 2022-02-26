@@ -2,6 +2,7 @@ import stripe
 
 from django.shortcuts import render
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -54,12 +55,14 @@ def get_front_page_courses(request):
 def get_individual_course(request, slug):
     course = Courses.objects.get(slug=slug)
     course_serializer = CourseDetailSerializer(course)
-    #lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
-    if request.user.is_authenticated and request.user.has_perm('courses.premium_user'):
+    # lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
+    if request.user.is_authenticated and request.user.has_perm("courses.premium_user"):
         lessons_serializer = LessonListSerializer(course.lessons.all(), many=True)
         course_data = course_serializer.data
         lessons_data = lessons_serializer.data
-    elif request.user.is_authenticated and not request.user.has_perm('courses.premium_user'):
+    elif request.user.is_authenticated and not request.user.has_perm(
+        "courses.premium_user"
+    ):
         lessons_serializer = LessonListSerializer(course.lessons.all()[0:2], many=True)
         course_data = course_serializer.data
         lessons_data = lessons_serializer.data
@@ -96,15 +99,41 @@ def add_comment(request, course_slug, lesson_slug):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_quiz(request, course_slug, lesson_slug):
     lesson = Lessons.objects.get(slug=lesson_slug)
     serializer = QuizSerializer(lesson.quiz.first())
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 @permission_classes([AllowAny])
 def get_publishable_key(request):
-    stripe_config = {'publicKey': settings.STRIPE_PUBLISHABLE_KEY}
+    stripe_config = {"publicKey": settings.STRIPE_PUBLISHABLE_KEY}
     return Response(stripe_config, status=status.HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(["GET"])
+def create_checkout_session(request):
+    domain_url = "http://localhost:8081"
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            success_url=f"{domain_url}/success",
+            cancel_url=f"{domain_url}/cancelled/",
+            mode="payment",
+            line_items=[
+                {
+                    "name": "Premium User",
+                    "amount": "100",
+                    "quantity": 1,
+                    "currency": "usd",
+                }
+            ],
+            payment_method_types=["card", "alipay"],
+        )
+        return Response({"session_id": checkout_session["id"]})
+    except Exception as e:
+        return Response({"error": str(e)})
