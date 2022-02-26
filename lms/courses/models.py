@@ -24,6 +24,7 @@ class Courses(models.Model):
     long_description = models.TextField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
     image = models.ImageField(upload_to="uploads/", blank=True, null=True)
+    # price = models.DecimalField(max_digits=19, decimal_places=4, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Courses"
