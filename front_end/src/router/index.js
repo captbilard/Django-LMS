@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Courses from '../views/Courses.vue'
 import Course from '../views/Course.vue'
 
+
 import MyAccount from '../views/dashboard/MyAccount.vue'
 
 const routes = [
