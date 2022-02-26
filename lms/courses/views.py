@@ -3,6 +3,7 @@ import stripe
 from django.shortcuts import render
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import Group
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -137,3 +138,10 @@ def create_checkout_session(request):
         return Response({"session_id": checkout_session["id"]})
     except Exception as e:
         return Response({"error": str(e)})
+
+@api_view(['GET'])
+def make_user_premium(request):
+    user = request.user
+    premium_group = Group.objects.get(name="Premium Users")
+    user.groups.add(premium_group)
+    return Response({"msg":"Added to group"})
