@@ -109,6 +109,18 @@ export default {
         });
     },
     goPremium: function () {
+      axios.get("/api/v1/courses/create_checkout_session")
+      .then((response) =>{
+        return this.stripe.redirectToCheckout({sessionId:response.data.session_id})
+      })
+      .then((result) =>{
+        if(result.error){
+          alert(result.error.message)
+        }
+      })
+      .catch((error) =>{
+        console.log(error);
+      })
       console.log("Go Premium");
     },
   },
