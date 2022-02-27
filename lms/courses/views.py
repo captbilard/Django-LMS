@@ -128,7 +128,7 @@ def create_checkout_session(request):
             line_items=[
                 {
                     "name": "Premium User",
-                    "amount": "100",
+                    "amount": "1000",
                     "quantity": 1,
                     "currency": "usd",
                 }
