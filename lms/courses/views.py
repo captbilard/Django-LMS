@@ -141,7 +141,10 @@ def create_checkout_session(request):
 
 @api_view(['GET'])
 def make_user_premium(request):
-    user = request.user
-    premium_group = Group.objects.get(name="Premium Users")
-    user.groups.add(premium_group)
-    return Response({"msg":"Added to group"})
+    try:
+        user = request.user
+        premium_group = Group.objects.get(name="Premium Users")
+        user.groups.add(premium_group)
+        return Response({"msg":"Added to group"})
+    except Exception as e:
+        return Response({"error": str(e)})
